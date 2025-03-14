@@ -1,7 +1,5 @@
 package com.example.librarymanagementbackend.entity;
 
-import com.example.librarymanagementbackend.constants.BookRequestStatus;
-import com.example.librarymanagementbackend.constants.BookRequestType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,22 +14,24 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 @Entity
-@Table(name = "book_requests")
-public class BookRequest {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    BookLoan bookLoan;
+    @Column(name = "name", unique = false, nullable = false)
+    String name;
 
-    @Enumerated(EnumType.STRING)
-    BookRequestStatus status;
+    @Column(name = "user_name")
+    String userName;
 
-    @Enumerated(EnumType.STRING)
-    BookRequestType type;
+    @Column(name = "email", unique = true)
+    String email;
+
+    @Column(name = "password", nullable = false)
+    String password;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,6 +40,9 @@ public class BookRequest {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
+
+    @ManyToOne
+    Role role;
 
     @PrePersist
     protected void onCreate() {

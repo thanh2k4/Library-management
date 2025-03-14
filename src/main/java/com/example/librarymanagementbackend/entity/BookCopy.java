@@ -20,9 +20,8 @@ import java.util.Date;
 @Table(name = "book_copy")
 public class BookCopy {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false, unique = true)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
