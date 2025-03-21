@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, String> {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("SELECT c FROM Author c WHERE (:name IS NULL OR c.name LIKE %:name%)")
     List<Author> findAllByFilters(@Param("name") String name);
 
