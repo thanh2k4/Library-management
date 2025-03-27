@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
         @Query("SELECT b FROM Book b WHERE (:title IS NULL OR b.title LIKE %:title%) " +
                         "AND (:publisherId IS NULL OR b.publisher.id = :publisherId) " +
