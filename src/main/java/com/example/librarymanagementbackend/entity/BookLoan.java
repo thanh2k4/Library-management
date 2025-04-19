@@ -46,7 +46,7 @@ public class BookLoan {
     BookLoanStatus status;
 
     @Column(nullable = true)
-    String currentBookRequestId;
+    Long currentBookRequestId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

@@ -13,5 +13,5 @@ import lombok.experimental.FieldDefaults;
 public class UserGetAllRequest extends BaseGetAllRequest {
     String name;
     String Email;
-    Integer roleId;
+    Long roleId;
 }

@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-    String id;
+    Long id;
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     String name;
     String userName;

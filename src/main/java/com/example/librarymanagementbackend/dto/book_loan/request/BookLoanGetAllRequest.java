@@ -1,6 +1,7 @@
 package com.example.librarymanagementbackend.dto.book_loan.request;
 
-import com.example.librarymanagementbackend.constants.BookCopyStatus;
+import com.example.librarymanagementbackend.constants.BookLoanStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookLoanGetAllRequest {
     String bookTitle;
-    BookCopyStatus status;
+    BookLoanStatus status;
     Long userId;
     Long skipCount;
     Long maxResultCount;

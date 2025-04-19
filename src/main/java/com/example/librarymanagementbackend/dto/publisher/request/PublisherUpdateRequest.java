@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PublisherUpdateRequest {
-    int id;
+    Long id;
     @NotBlank(message = "Name is mandatory")
     String name;
 }

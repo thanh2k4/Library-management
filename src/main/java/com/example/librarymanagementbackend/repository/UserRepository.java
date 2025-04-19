@@ -12,28 +12,28 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // boolean existsByUsername(String username);
-    Optional<User> findByName(String name);
+        // boolean existsByUsername(String username);
+        Optional<User> findByName(String name);
 
-    @Query("SELECT new com.example.library_management_backend.dto.user.response.UserResponse(" +
-            "u.id, u.name, u.userName, u.email, u.CreatedAt, u.UpdatedAt, r.id, r.name) " +
-            "FROM User u " +
-            "LEFT JOIN u.role r " +
-            "WHERE (:name IS NULL OR u.name = :name) " +
-            "AND (:email IS NULL OR u.email = :email) " +
-            "AND (:roleId IS NULL OR r.id = :roleId) " +
-            "ORDER BY u.UpdatedAt DESC")
-    List<UserResponse> findAllByFilters(@Param("name") String name,
-            @Param("email") String email,
-            @Param("roleId") Long roleId);
+        @Query("SELECT new com.example.librarymanagementbackend.dto.user.response.UserResponse(" +
+                        "u.id, u.name, u.userName, u.email, u.CreatedAt, u.UpdatedAt, r.id, r.name) " +
+                        "FROM User u " +
+                        "LEFT JOIN u.role r " +
+                        "WHERE (:name IS NULL OR u.name = :name) " +
+                        "AND (:email IS NULL OR u.email = :email) " +
+                        "AND (:roleId IS NULL OR r.id = :roleId) " +
+                        "ORDER BY u.UpdatedAt DESC")
+        List<UserResponse> findAllByFilters(@Param("name") String name,
+                        @Param("email") String email,
+                        @Param("roleId") Long roleId);
 
-    @Query("SELECT COUNT(u) " +
-            "FROM User u " +
-            "LEFT JOIN u.role r " +
-            "WHERE (:name IS NULL OR u.name = :name) " +
-            "AND (:email IS NULL OR u.email = :email) " +
-            "AND (:roleId IS NULL OR r.id = :roleId)")
-    long countByFilters(@Param("name") String name,
-            @Param("email") String email,
-            @Param("roleId") Long roleId);
+        @Query("SELECT COUNT(u) " +
+                        "FROM User u " +
+                        "LEFT JOIN u.role r " +
+                        "WHERE (:name IS NULL OR u.name = :name) " +
+                        "AND (:email IS NULL OR u.email = :email) " +
+                        "AND (:roleId IS NULL OR r.id = :roleId)")
+        long countByFilters(@Param("name") String name,
+                        @Param("email") String email,
+                        @Param("roleId") Long roleId);
 }

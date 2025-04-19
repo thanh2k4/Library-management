@@ -38,8 +38,8 @@ public class CategoryService {
     }
 
     public BaseGetAllResponse<CategoryResponse> getAllCategories(CategoryGetAllRequest request) {
-        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
 
         List<CategoryResponse> categoryResponseList = categoryRepository.findAllByFilters(name)
@@ -56,22 +56,22 @@ public class CategoryService {
     }
 
     public CategoryResponse updateCategory(CategoryUpdateRequest request) {
-        Category category = categoryRepository.findById(String.valueOf(request.getId()))
+        Category category = categoryRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         categoryMapper.updateCategory(category, request);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);
     }
 
-    public void deleteCategory(int id) {
-        if (!categoryRepository.existsById(String.valueOf(id))) {
+    public void deleteCategory(Long id) {
+        if (!categoryRepository.existsById(id)) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
-        categoryRepository.deleteById(String.valueOf(id));
+        categoryRepository.deleteById(id);
     }
 
-    public CategoryResponse getCategory(int id) {
-        Category category = categoryRepository.findById(String.valueOf(id))
+    public CategoryResponse getCategory(Long id) {
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         return categoryMapper.toCategoryResponse(category);
     }

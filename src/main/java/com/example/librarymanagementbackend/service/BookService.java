@@ -35,18 +35,16 @@ public class BookService {
 
     public BookResponse createBook(BookCreationRequest request) {
         Book book = bookMapper.toBook(request);
-        book.setPublisher(publisherRepository.findById(String.valueOf(request.getPublisherId()))
+        book.setPublisher(publisherRepository.findById(request.getPublisherId())
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED)));
         var authors = authorRepository.findAllById(
-                request.getAuthorIds().stream().map(String::valueOf).collect(Collectors.toSet())
-        );
+                request.getAuthorIds().stream().map(Long::valueOf).collect(Collectors.toSet()));
         if (authors.size() != request.getAuthorIds().size()) {
             throw new AppException(ErrorCode.AUTHOR_NOT_EXISTED);
         }
         book.setAuthors(new HashSet<>(authors));
         var categories = categoryRepository.findAllById(
-                request.getCategoryIds().stream().map(String::valueOf).collect(Collectors.toSet())
-        );
+                request.getCategoryIds().stream().map(Long::valueOf).collect(Collectors.toSet()));
         if (categories.size() != request.getCategoryIds().size()) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
@@ -64,12 +62,14 @@ public class BookService {
     }
 
     public BaseGetAllResponse<BookResponse> getAllBooks(BookGetAllRequest request) {
-        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String title = (request.getTitle() == null || request.getTitle().isEmpty()) ? null : request.getTitle();
-        Integer publisherId = (request.getPublisherId() == null || request.getPublisherId() == 0) ? null : request.getPublisherId();
-        Integer authorId = (request.getAuthorId() == null || request.getAuthorId() == 0) ? null : request.getAuthorId();
-        Integer categoryId = (request.getCategoryId() == null || request.getCategoryId() == 0) ? null : request.getCategoryId();
+        Long publisherId = (request.getPublisherId() == null || request.getPublisherId() == 0) ? null
+                : request.getPublisherId();
+        Long authorId = (request.getAuthorId() == null || request.getAuthorId() == 0) ? null : request.getAuthorId();
+        Long categoryId = (request.getCategoryId() == null || request.getCategoryId() == 0) ? null
+                : request.getCategoryId();
 
         List<BookResponse> bookResponseList = bookRepository.findAllByFilters(title, publisherId, authorId, categoryId)
                 .stream()
@@ -77,7 +77,8 @@ public class BookService {
                 .limit(maxResultCount)
                 .map(book -> {
                     BookResponse bookResponse = bookMapper.toBookResponse(book);
-                    long availableCopies = bookCopyRepository.countByFilters(String.valueOf(book.getId()), null, BookCopyStatus.AVAILABLE);
+                    long availableCopies = bookCopyRepository.countByFilters(book.getId(), null,
+                            BookCopyStatus.AVAILABLE);
                     bookResponse.setNumberOfCopiesAvailable(availableCopies);
                     return bookResponse;
                 })
@@ -90,22 +91,21 @@ public class BookService {
     }
 
     public BookResponse updateBook(BookUpdateRequest request) {
-        Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+        Book book = bookRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         bookMapper.updateBook(book, request);
         if (request.getPublisherId() != 0) {
-            book.setPublisher(publisherRepository.findById(String.valueOf(request.getPublisherId()))
+            book.setPublisher(publisherRepository.findById(request.getPublisherId())
                     .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED)));
         }
         var authors = authorRepository.findAllById(
-                request.getAuthorIds().stream().map(String::valueOf).collect(Collectors.toSet())
-        );
+                request.getAuthorIds().stream().map(Long::valueOf).collect(Collectors.toSet()));
         if (authors.size() != request.getAuthorIds().size()) {
             throw new AppException(ErrorCode.AUTHOR_NOT_EXISTED);
         }
         book.setAuthors(new HashSet<>(authors));
         var categories = categoryRepository.findAllById(
-                request.getCategoryIds().stream().map(String::valueOf).collect(Collectors.toSet())
-        );
+                request.getCategoryIds().stream().map(Long::valueOf).collect(Collectors.toSet()));
         if (categories.size() != request.getCategoryIds().size()) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
@@ -117,14 +117,14 @@ public class BookService {
         return bookResponse;
     }
 
-    public void deleteBook(int id) {
+    public void deleteBook(Long id) {
         if (!bookRepository.existsById(id)) {
             throw new AppException(ErrorCode.BOOK_NOT_EXISTED);
         }
         bookRepository.deleteById(id);
     }
 
-    public BookResponse getBookById(int id) {
+    public BookResponse getBookById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         BookResponse bookResponse = bookMapper.toBookResponse(book);

@@ -18,8 +18,8 @@ import java.util.Date;
 @Table(name = "fines")
 public class Fine {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     User user;

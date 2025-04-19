@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-
         @Query("SELECT b FROM Book b WHERE (:title IS NULL OR b.title LIKE %:title%) " +
                         "AND (:publisherId IS NULL OR b.publisher.id = :publisherId) " +
                         "AND (:authorId IS NULL OR :authorId IN (SELECT a.id FROM b.authors a)) " +

@@ -1,6 +1,7 @@
 package com.example.librarymanagementbackend.dto.book_loan.request;
 
-import com.example.librarymanagementbackend.constants.BookCopyStatus;
+import com.example.librarymanagementbackend.constants.BookLoanStatus;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,5 +19,5 @@ public class BookLoanCreationRequest {
     Date loanDate;
     int numberOfDaysLoan;
     @NotNull(message = "Status is required")
-    BookCopyStatus status;
+    BookLoanStatus status;
 }

@@ -47,21 +47,18 @@ public class BookCopyService {
             bookCopy.setStatus(BookCopyStatus.AVAILABLE);
             bookCopies.add(bookCopy);
         }
-        // Lưu tất cả các bản ghi vào repository
-        List<BookCopy> savedBookCopies = bookCopyRepository.saveAll(bookCopies);
 
-        // Map saved BookCopy entities to BookCopyResponse objects
+        List<BookCopy> savedBookCopies = bookCopyRepository.saveAll(bookCopies);
         return savedBookCopies.stream()
                 .map(bookCopyMapper::toBookCopyResponse)
                 .collect(Collectors.toList());
     }
 
-
     public BaseGetAllResponse<BookCopyResponse> getAllBookCopies(BookCopyGetAllRequest request) {
-        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
-        String bookId = (request.getBookId() == null || request.getBookId().isEmpty()) ? null : request.getBookId();
-        String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null : request.getBookTitle();
+        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        Long bookId = (request.getBookId() == null) ? null : request.getBookId();
+        String bookTitle = (request.getBookTitle() == null) ? null : request.getBookTitle();
         BookCopyStatus status = request.getStatus();
 
         List<BookCopyResponse> bookCopyResponseList = bookCopyRepository.findAllByFilters(bookId, bookTitle, status)
@@ -77,7 +74,7 @@ public class BookCopyService {
                 .build();
     }
 
-    public BookCopyResponse getBookCopyById(String id) {
+    public BookCopyResponse getBookCopyById(Long id) {
         BookCopy bookCopy = bookCopyRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_COPY_NOT_EXISTED));
         return bookCopyMapper.toBookCopyResponse(bookCopy);
@@ -91,7 +88,7 @@ public class BookCopyService {
         return bookCopyMapper.toBookCopyResponse(bookCopy);
     }
 
-    public void deleteBookCopy(String id) {
+    public void deleteBookCopy(Long id) {
         if (!bookCopyRepository.existsById(id)) {
             throw new AppException(ErrorCode.BOOK_COPY_NOT_EXISTED);
         }

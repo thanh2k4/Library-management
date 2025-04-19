@@ -40,8 +40,8 @@ public class AuthorService {
     public BaseGetAllResponse<AuthorResponse> getAllAuthors(AuthorGetAllRequest request) {
         log.info("in getAllAuthors function");
 
-        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
 
         List<AuthorResponse> authorResponseList = authorRepository.findAllByFilters(name)
@@ -58,7 +58,7 @@ public class AuthorService {
     }
 
     public AuthorResponse updateAuthor(AuthorUpdateRequest request) {
-        Author author = authorRepository.findById(String.valueOf(request.getId()))
+        Author author = authorRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         authorMapper.updateAuthor(author, request);
         author = authorRepository.save(author);
@@ -66,15 +66,15 @@ public class AuthorService {
         return authorMapper.toAuthorResponse(author);
     }
 
-    public void deleteAuthor(int id) {
-        if (!authorRepository.existsById(String.valueOf(id))) {
+    public void deleteAuthor(Long id) {
+        if (!authorRepository.existsById(id)) {
             throw new AppException(ErrorCode.AUTHOR_NOT_EXISTED);
         }
-        authorRepository.deleteById(String.valueOf(id));
+        authorRepository.deleteById(id);
     }
 
-    public AuthorResponse getAuthor(int id) {
-        Author author = authorRepository.findById(String.valueOf(id))
+    public AuthorResponse getAuthor(Long id) {
+        Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         return authorMapper.toAuthorResponse(author);
     }

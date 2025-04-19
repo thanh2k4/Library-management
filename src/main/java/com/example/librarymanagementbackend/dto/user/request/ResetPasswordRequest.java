@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class ResetPasswordRequest {
     String adminPassword;
     String newPassword;
-    String userId;
+    Long userId;
 }

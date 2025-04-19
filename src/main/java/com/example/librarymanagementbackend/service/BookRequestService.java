@@ -30,7 +30,7 @@ public class BookRequestService {
     BookLoanRepository bookLoanRepository;
     BookRequestMapper bookRequestMapper;
 
-    public BookRequestResponse createBookRequest (BookRequestCreationRequest request) {
+    public BookRequestResponse createBookRequest(BookRequestCreationRequest request) {
 
         BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
@@ -38,12 +38,11 @@ public class BookRequestService {
         BookRequest bookRequest = bookRequestMapper.toBookRequest(request);
         bookRequest.setBookLoan(bookLoan);
 
-
         bookRequest = bookRequestRepository.save(bookRequest);
         return bookRequestMapper.toBookRequestResponse(bookRequest);
     }
 
-    public void deleteBookRequest(String id) {
+    public void deleteBookRequest(Long id) {
         BookRequest bookRequest = bookRequestRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
 
@@ -61,7 +60,8 @@ public class BookRequestService {
         return bookRequestMapper.toBookRequestResponse(bookRequest);
 
     }
-    public BookRequestResponse getBookRequestById(String id) {
+
+    public BookRequestResponse getBookRequestById(Long id) {
         BookRequest bookRequest = bookRequestRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
 
@@ -69,15 +69,18 @@ public class BookRequestService {
     }
 
     public BaseGetAllResponse<BookRequestResponse> getAllBookRequests(BookRequestGetAllRequest request) {
-        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
-        String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null : request.getBookTitle();
-        String userId = (request.getUserId() == null || request.getUserId().isEmpty()) ? null : request.getUserId();
-        String userName = (request.getUserName() == null || request.getUserName().isEmpty()) ? null : request.getUserName();
+        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null
+                : request.getBookTitle();
+        Long userId = (request.getUserId() == null) ? null : request.getUserId();
+        String userName = (request.getUserName() == null || request.getUserName().isEmpty()) ? null
+                : request.getUserName();
         BookRequestStatus status = request.getStatus();
         BookRequestType type = request.getType();
 
-        List<BookRequestResponse> bookRequestResponseList = bookRequestRepository.findAllByFilters(bookTitle, status, userId, type, userName)
+        List<BookRequestResponse> bookRequestResponseList = bookRequestRepository
+                .findAllByFilters(bookTitle, status, userId, type, userName)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)

@@ -1,6 +1,7 @@
 package com.example.librarymanagementbackend.dto.book_loan.response;
 
-import com.example.librarymanagementbackend.constants.BookCopyStatus;
+import com.example.librarymanagementbackend.constants.BookLoanStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,7 +20,7 @@ public class BookLoanResponse {
     Date loanDate;
     Date returnDate;
     Date actualReturnDate;
-    BookCopyStatus status;
+    BookLoanStatus status;
     String bookTitle;
     Long bookRequestId;
 }

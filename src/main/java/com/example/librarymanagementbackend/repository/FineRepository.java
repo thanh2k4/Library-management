@@ -9,15 +9,15 @@ import java.util.List;
 
 @Repository
 public interface FineRepository extends JpaRepository<Fine, Long> {
-    @Query("SELECT f FROM Fine f " +
-            "JOIN f.bookLoan bl " +
-            "WHERE (:userId IS NULL OR bl.user.id = :userId) " +
-            "ORDER BY f.UpdatedAt DESC")
-    List<Fine> findAllFinesByFilters(@Param("userId") Long userId);
+        @Query("SELECT f FROM Fine f " +
+                        "JOIN f.bookLoan bl " +
+                        "WHERE (:userId IS NULL OR bl.user.id = :userId) " +
+                        "ORDER BY f.UpdatedAt DESC")
+        List<Fine> findAllFinesByFilters(@Param("userId") Long userId);
 
-    @Query("SELECT COUNT(f) " +
-            "FROM Fine f " +
-            "JOIN f.bookLoan bl " +
-            "WHERE (:userId IS NULL OR bl.user.id = :userId)")
-    long countByFilters(@Param("userId") Long userId);
+        @Query("SELECT COUNT(f) " +
+                        "FROM Fine f " +
+                        "JOIN f.bookLoan bl " +
+                        "WHERE (:userId IS NULL OR bl.user.id = :userId)")
+        long countByFilters(@Param("userId") Long userId);
 }
