@@ -1,0 +1,32 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:16.8-alpine3.20
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    environment:
+      DATABASE_HOST: postgres
+networks:
+  app-network:

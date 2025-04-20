@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
 
         @Query("SELECT bl FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
-                        "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
+                        "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE CONCAT('%', :bookTitle, '%')) " +
                         "AND (:status IS NULL OR bl.status = :status) " +
-                        "ORDER BY bl.UpdatedAt DESC")
+                        "ORDER BY bl.updatedAt DESC")
         List<BookLoan> findAllByFilters(@Param("userId") Long userId,
                         @Param("bookTitle") String bookTitle,
                         @Param("status") BookLoanStatus status);
