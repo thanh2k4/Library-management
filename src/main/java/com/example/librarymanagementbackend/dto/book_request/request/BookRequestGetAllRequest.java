@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class BookRequestGetAllRequest {
     String bookTitle;
     Long userId;
-    String userName;
+    String username;
     BookRequestStatus status;
     BookRequestType type;
     Long skipCount;

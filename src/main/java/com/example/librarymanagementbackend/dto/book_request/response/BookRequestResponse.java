@@ -17,7 +17,7 @@ public class BookRequestResponse {
     Long bookCopyId;
     String bookTitle;
     Long userId;
-    String userName;
+    String username;
     BookRequestType type;
     BookRequestStatus status;
     Date createdAt;

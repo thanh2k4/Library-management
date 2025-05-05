@@ -2,11 +2,9 @@ package com.example.librarymanagementbackend.controller;
 
 import com.example.librarymanagementbackend.dto.base.response.ApiResponse;
 import com.example.librarymanagementbackend.dto.authen.request.AuthenticationRequest;
-import com.example.librarymanagementbackend.dto.authen.request.IntrospectRequest;
 import com.example.librarymanagementbackend.dto.authen.request.LogoutRequest;
 import com.example.librarymanagementbackend.dto.authen.request.RefreshRequest;
 import com.example.librarymanagementbackend.dto.authen.response.AuthenticationResponse;
-import com.example.librarymanagementbackend.dto.authen.response.IntrospectResponse;
 import com.example.librarymanagementbackend.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +31,6 @@ public class AuthenticationController {
                                 .build();
         }
 
-        @PostMapping("/Introspect")
-        ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
-                        throws JOSEException, ParseException {
-                var result = authenticationService.introspect(request);
-                return ApiResponse.<IntrospectResponse>builder()
-                                .result(result)
-                                .build();
-        }
-
         @PostMapping("/Logout")
         ApiResponse<Void> logout(@RequestBody LogoutRequest request)
                         throws JOSEException, ParseException {
@@ -53,7 +42,7 @@ public class AuthenticationController {
         @PostMapping("/Refresh")
         ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
                         throws JOSEException, ParseException {
-                var result = authenticationService.refreshToken(request);
+                var result = authenticationService.refresh(request);
                 return ApiResponse.<AuthenticationResponse>builder()
                                 .result(result)
                                 .build();

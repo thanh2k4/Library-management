@@ -11,7 +11,8 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
-    String token;
+    String refreshToken;
+    String accessToken;
     boolean authenticated;
     private List<String> permissions;
 }

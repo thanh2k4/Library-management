@@ -1,7 +1,6 @@
 package com.example.librarymanagementbackend.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,9 +22,6 @@ public class SecurityConfig {
             "/swagger-resources/**", "/webjars/**", "/api/actuator/**"
     };
 
-    @Value("${jwt.signerKey}")
-    private String SIGNER_KEY;
-
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
@@ -38,16 +34,15 @@ public class SecurityConfig {
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                 .decoder(customJwtDecoder)
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-
 
         );
         httpSecurity.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.addAllowedOriginPattern("*");
             corsConfiguration.addAllowedMethod("*");
-            corsConfiguration.addAllowedHeader("*"); // Cho phép tất cả các header, bao gồm Authorization
+            corsConfiguration.addAllowedHeader("*");
             corsConfiguration.setAllowCredentials(true);
             return corsConfiguration;
         })).csrf(AbstractHttpConfigurer::disable);

@@ -16,7 +16,7 @@ import java.util.Date;
 public class UserResponse {
     Long id;
     String name;
-    String userName;
+    String username;
     String email;
     Date createdAt;
     Date updatedAt;

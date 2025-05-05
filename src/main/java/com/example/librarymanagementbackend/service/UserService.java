@@ -55,7 +55,6 @@ public class UserService {
 
     @PreAuthorize("hasAuthority('Role.GetAll')")
     public BaseGetAllResponse<UserResponse> getAllUsers(UserGetAllRequest request) {
-        log.info("in getAllUsers function");
 
         Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0L;
         Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10L;
@@ -124,8 +123,6 @@ public class UserService {
             List<User> users = userRepository.findAllById(ids);
             if (users.size() != ids.size())
                 throw new AppException(ErrorCode.USER_NOT_EXISTED);
-
-            List<Long> userIds = users.stream().map(User::getId).toList();
             try {
                 userRepository.deleteAll(users);
             } catch (Exception exception) {
@@ -185,7 +182,8 @@ public class UserService {
     public void resetPassword(ResetPasswordRequest request) {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User admin = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User admin = userRepository.findByName(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         if (!passwordEncoder.matches(request.getAdminPassword(), admin.getPassword())) {
             throw new AppException(ErrorCode.WRONG_PASSWORD);
         }

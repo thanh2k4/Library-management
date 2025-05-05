@@ -18,25 +18,25 @@ public interface BookRequestRepository extends JpaRepository<BookRequest, Long> 
                         "WHERE (:bookTitle IS NULL OR br.bookLoan.bookCopy.book.title LIKE %:bookTitle%) " +
                         "AND (:type IS NULL OR br.type = :type) " +
                         "AND (:userId IS NULL OR br.bookLoan.user.id = :userId) " +
-                        "AND (:userName IS NULL OR br.bookLoan.user.name LIKE %:userName%) " +
+                        "AND (:username IS NULL OR br.bookLoan.user.name LIKE %:username%) " +
                         "AND (:status IS NULL OR br.status = :status) " +
                         "ORDER BY br.UpdatedAt DESC")
         List<BookRequest> findAllByFilters(@Param("bookTitle") String bookTitle,
                         @Param("status") BookRequestStatus status,
                         @Param("userId") Long userId,
                         @Param("type") BookRequestType type,
-                        @Param("userName") String userName);
+                        @Param("username") String username);
 
         @Query("SELECT COUNT(br) " +
                         "FROM BookRequest br " +
                         "WHERE (:bookTitle IS NULL OR br.bookLoan.bookCopy.book.title LIKE %:bookTitle%) " +
                         "AND (:type IS NULL OR br.type = :type) " +
                         "AND (:userId IS NULL OR br.bookLoan.user.id = :userId) " +
-                        "AND (:userName IS NULL OR br.bookLoan.user.name LIKE %:userName%) " +
+                        "AND (:username IS NULL OR br.bookLoan.user.name LIKE %:username%) " +
                         "AND (:status IS NULL OR br.status = :status)")
         long countByFilters(@Param("bookTitle") String bookTitle,
                         @Param("status") BookRequestStatus status,
                         @Param("userId") Long userId,
                         @Param("type") BookRequestType type,
-                        @Param("userName") String userName);
+                        @Param("username") String username);
 }

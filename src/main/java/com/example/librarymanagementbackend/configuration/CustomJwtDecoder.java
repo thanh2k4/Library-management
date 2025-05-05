@@ -18,8 +18,8 @@ import java.util.Objects;
 
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
-    @Value("${jwt.signerKey}")
-    private String signerKey;
+    @Value("${jwt.access-token.secret}")
+    private String accessTokenSecret;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -27,24 +27,24 @@ public class CustomJwtDecoder implements JwtDecoder {
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
     @Override
-    public Jwt decode(String token) throws JwtException {
-
+    public Jwt decode(String accessToken) throws JwtException {
         try {
             var response = authenticationService.introspect(
-                    IntrospectRequest.builder().token(token).build());
+                    IntrospectRequest.builder().accessToken(accessToken).build());
 
-            if (!response.isValid()) throw new JwtException("Token invalid");
+            if (!response.isValid())
+                throw new JwtException("Access Token invalid");
         } catch (JOSEException | ParseException e) {
             throw new JwtException(e.getMessage());
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(accessTokenSecret.getBytes(), "HS512");
             nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
         }
 
-        return nimbusJwtDecoder.decode(token);
+        return nimbusJwtDecoder.decode(accessToken);
     }
 }

@@ -16,7 +16,7 @@ public class BookLoanResponse {
     Long id;
     Long bookCopyId;
     Long userId;
-    String userName;
+    String username;
     Date loanDate;
     Date returnDate;
     Date actualReturnDate;

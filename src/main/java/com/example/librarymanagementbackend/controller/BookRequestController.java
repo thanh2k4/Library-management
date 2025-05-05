@@ -42,7 +42,7 @@ public class BookRequestController {
                         @RequestParam(value = "bookTitle", required = false) String bookTitle,
                         @RequestParam(value = "status", required = false) BookRequestStatus status,
                         @RequestParam(value = "userId", required = false) Long userId,
-                        @RequestParam(value = "userName", required = false) String userName,
+                        @RequestParam(value = "username", required = false) String username,
                         @RequestParam(value = "type", required = false) BookRequestType type,
                         @RequestParam(value = "skipCount", defaultValue = "0") Long skipCount,
                         @RequestParam(value = "maxResultCount", defaultValue = "10") Long maxResultCount) {
@@ -50,7 +50,7 @@ public class BookRequestController {
                 BookRequestGetAllRequest request = BookRequestGetAllRequest.builder()
                                 .bookTitle(bookTitle)
                                 .userId(userId)
-                                .userName(userName)
+                                .username(username)
                                 .type(type)
                                 .status(status)
                                 .skipCount(skipCount)

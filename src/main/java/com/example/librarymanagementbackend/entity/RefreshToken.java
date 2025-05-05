@@ -5,8 +5,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @Builder
@@ -14,8 +12,8 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class InvalidatedToken {
+public class RefreshToken {
     @Id
-    String id;
-    Date expiryTime;
+    String username;
+    String refreshToken;
 }

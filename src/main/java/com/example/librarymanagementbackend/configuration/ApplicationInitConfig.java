@@ -25,7 +25,7 @@ public class ApplicationInitConfig {
     RoleRepository roleRepository;
 
     @Bean
-    ApplicationRunner applicationRunner (UserRepository userRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
             if (roleRepository.findByName(UserRole.ADMIN).isEmpty()) {
                 roleRepository.save(Role.builder()
@@ -48,7 +48,8 @@ public class ApplicationInitConfig {
                         .userName("admin")
                         .password(passwordEncoder.encode("admin"))
                         .email("admin@gmail.com")
-                        .role(roleRepository.findByName(UserRole.ADMIN).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
+                        .role(roleRepository.findByName(UserRole.ADMIN)
+                                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
                         .build());
 
                 log.warn("Default admin user created with username: admin and password: admin");

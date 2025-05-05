@@ -26,71 +26,72 @@ import java.util.stream.Collectors;
 @FieldDefaults(makeFinal = true)
 public class BookRequestService {
 
-    BookRequestRepository bookRequestRepository;
-    BookLoanRepository bookLoanRepository;
-    BookRequestMapper bookRequestMapper;
+        BookRequestRepository bookRequestRepository;
+        BookLoanRepository bookLoanRepository;
+        BookRequestMapper bookRequestMapper;
 
-    public BookRequestResponse createBookRequest(BookRequestCreationRequest request) {
+        public BookRequestResponse createBookRequest(BookRequestCreationRequest request) {
 
-        BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
+                BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
+                                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
 
-        BookRequest bookRequest = bookRequestMapper.toBookRequest(request);
-        bookRequest.setBookLoan(bookLoan);
+                BookRequest bookRequest = bookRequestMapper.toBookRequest(request);
+                bookRequest.setBookLoan(bookLoan);
 
-        bookRequest = bookRequestRepository.save(bookRequest);
-        return bookRequestMapper.toBookRequestResponse(bookRequest);
-    }
+                bookRequest = bookRequestRepository.save(bookRequest);
+                return bookRequestMapper.toBookRequestResponse(bookRequest);
+        }
 
-    public void deleteBookRequest(Long id) {
-        BookRequest bookRequest = bookRequestRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
+        public void deleteBookRequest(Long id) {
+                BookRequest bookRequest = bookRequestRepository.findById(id)
+                                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
 
-        bookRequest.setBookLoan(null);
-        bookRequestRepository.delete(bookRequest);
-    }
+                bookRequest.setBookLoan(null);
+                bookRequestRepository.delete(bookRequest);
+        }
 
-    public BookRequestResponse updateBookRequest(BookRequestUpdateRequest request) {
-        BookRequest bookRequest = bookRequestRepository.findById(request.getId())
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
+        public BookRequestResponse updateBookRequest(BookRequestUpdateRequest request) {
+                BookRequest bookRequest = bookRequestRepository.findById(request.getId())
+                                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
 
-        bookRequestMapper.updateBookRequest(bookRequest, request);
+                bookRequestMapper.updateBookRequest(bookRequest, request);
 
-        bookRequestRepository.save(bookRequest);
-        return bookRequestMapper.toBookRequestResponse(bookRequest);
+                bookRequestRepository.save(bookRequest);
+                return bookRequestMapper.toBookRequestResponse(bookRequest);
 
-    }
+        }
 
-    public BookRequestResponse getBookRequestById(Long id) {
-        BookRequest bookRequest = bookRequestRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
+        public BookRequestResponse getBookRequestById(Long id) {
+                BookRequest bookRequest = bookRequestRepository.findById(id)
+                                .orElseThrow(() -> new AppException(ErrorCode.BOOK_REQUEST_NOT_EXISTED));
 
-        return bookRequestMapper.toBookRequestResponse(bookRequest);
-    }
+                return bookRequestMapper.toBookRequestResponse(bookRequest);
+        }
 
-    public BaseGetAllResponse<BookRequestResponse> getAllBookRequests(BookRequestGetAllRequest request) {
-        Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
-        Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
-        String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null
-                : request.getBookTitle();
-        Long userId = (request.getUserId() == null) ? null : request.getUserId();
-        String userName = (request.getUserName() == null || request.getUserName().isEmpty()) ? null
-                : request.getUserName();
-        BookRequestStatus status = request.getStatus();
-        BookRequestType type = request.getType();
+        public BaseGetAllResponse<BookRequestResponse> getAllBookRequests(BookRequestGetAllRequest request) {
+                Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+                Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+                String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null
+                                : request.getBookTitle();
+                Long userId = (request.getUserId() == null) ? null : request.getUserId();
+                String username = (request.getUsername() == null || request.getUsername().isEmpty()) ? null
+                                : request.getUsername();
+                BookRequestStatus status = request.getStatus();
+                BookRequestType type = request.getType();
 
-        List<BookRequestResponse> bookRequestResponseList = bookRequestRepository
-                .findAllByFilters(bookTitle, status, userId, type, userName)
-                .stream()
-                .skip(skipCount)
-                .limit(maxResultCount)
-                .map(bookRequestMapper::toBookRequestResponse)
-                .collect(Collectors.toList());
+                List<BookRequestResponse> bookRequestResponseList = bookRequestRepository
+                                .findAllByFilters(bookTitle, status, userId, type, username)
+                                .stream()
+                                .skip(skipCount)
+                                .limit(maxResultCount)
+                                .map(bookRequestMapper::toBookRequestResponse)
+                                .collect(Collectors.toList());
 
-        return BaseGetAllResponse.<BookRequestResponse>builder()
-                .data(bookRequestResponseList)
-                .totalRecords(bookRequestRepository.countByFilters(bookTitle, status, userId, type, userName))
-                .build();
-    }
+                return BaseGetAllResponse.<BookRequestResponse>builder()
+                                .data(bookRequestResponseList)
+                                .totalRecords(bookRequestRepository.countByFilters(bookTitle, status, userId, type,
+                                                username))
+                                .build();
+        }
 
 }

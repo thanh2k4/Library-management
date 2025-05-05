@@ -38,7 +38,6 @@ public class AuthorService {
     }
 
     public BaseGetAllResponse<AuthorResponse> getAllAuthors(AuthorGetAllRequest request) {
-        log.info("in getAllAuthors function");
 
         Long skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         Long maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
