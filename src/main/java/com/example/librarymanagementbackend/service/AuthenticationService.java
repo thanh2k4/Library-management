@@ -61,10 +61,10 @@ public class AuthenticationService {
     protected long accessTokenDuration;
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
-        var refreshToken = request.getAccessToken();
+        var accessToken = request.getAccessToken();
         boolean isValid = true;
         try {
-            verifyRefreshToken(refreshToken);
+            verifyAccessToken(accessToken);
         } catch (AppException e) {
             isValid = false;
         }
