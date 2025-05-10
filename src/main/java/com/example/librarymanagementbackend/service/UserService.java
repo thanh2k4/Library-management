@@ -1,5 +1,6 @@
 package com.example.librarymanagementbackend.service;
 
+import com.example.librarymanagementbackend.constants.UserRole;
 import com.example.librarymanagementbackend.dto.base.response.BaseGetAllResponse;
 import com.example.librarymanagementbackend.dto.user.request.*;
 import com.example.librarymanagementbackend.dto.user.response.UserConfigurationResponse;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +44,29 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(roleRepository.findById(request.getRoleId())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
+        if (!user.getRole().getName().equals(UserRole.USER)) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRoleName(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse createStaffByAdmin(UserCreationRequest request) {
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(roleRepository.findById(request.getRoleId())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
+        if (!user.getRole().getName().equals(UserRole.STAFF)) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException exception) {

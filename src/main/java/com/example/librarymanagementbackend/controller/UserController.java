@@ -27,6 +27,11 @@ public class UserController {
         return ApiResponse.<UserResponse>builder().result(userService.createUser(request)).build();
     }
 
+    @PostMapping("/CreateStaff")
+    ApiResponse<UserResponse> createStaff(@RequestBody UserCreationRequest request) {
+        return ApiResponse.<UserResponse>builder().result(userService.createStaffByAdmin(request)).build();
+    }
+
     @GetMapping("/GetAll")
     ApiResponse<BaseGetAllResponse<UserResponse>> getAllUser(
             @RequestParam(value = "skipCount", defaultValue = "0") Long skipCount,
