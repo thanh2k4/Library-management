@@ -145,7 +145,7 @@ public class AuthenticationService {
                 .subject(user.getName())
                 .issuer("Nhom34")
                 .issueTime(new Date())
-                .expirationTime(Date.from(Instant.now().plus(refreshTokenDuration, ChronoUnit.SECONDS)))
+                .expirationTime(Date.from(Instant.now().plus(accessTokenDuration, ChronoUnit.SECONDS)))
                 .claim("scope", buildScope(user))
                 .build();
 
