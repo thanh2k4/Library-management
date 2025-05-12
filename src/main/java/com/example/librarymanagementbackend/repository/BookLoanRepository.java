@@ -13,7 +13,8 @@ import java.util.List;
 public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
 
         @Query("SELECT bl FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
-                        "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE CONCAT('%', :bookTitle, '%')) " +
+                        "AND (:bookTitle IS NULL OR LOWER(bl.bookCopy.book.title) LIKE LOWER(CONCAT('%', :bookTitle, '%'))) "
+                        +
                         "AND (:status IS NULL OR bl.status = :status) " +
                         "ORDER BY bl.updatedAt DESC")
         List<BookLoan> findAllByFilters(@Param("userId") Long userId,
@@ -21,7 +22,8 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
                         @Param("status") BookLoanStatus status);
 
         @Query("SELECT COUNT(bl) FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
-                        "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE CONCAT('%', :bookTitle, '%')) " +
+                        "AND (:bookTitle IS NULL OR LOWER(bl.bookCopy.book.title) LIKE LOWER(CONCAT('%', :bookTitle, '%'))) "
+                        +
                         "AND (:status IS NULL OR bl.status = :status)")
         long countByFilters(@Param("userId") Long userId,
                         @Param("bookTitle") String bookTitle,
