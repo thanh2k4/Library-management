@@ -15,7 +15,7 @@ public class FineResponse {
     Long userId;
     String username;
     Long bookLoanId;
-    Long bookTitle;
+    String bookTitle;
     Double amount;
     Date createdAt;
     Date updatedAt;
